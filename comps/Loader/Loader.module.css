@@ -1,0 +1,13 @@
+.loader {
+  text-align: center;
+  margin-top: 170px;
+}
+
+.circular {
+  height: 300px;
+  width: 250px;;
+}
+
+.linerProgress {
+  z-index: 2100;
+}
