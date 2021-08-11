@@ -1,9 +1,21 @@
-
-@media (min-width: 768px) {
-  .toggle {
-    padding:0;
-    margin: 29px 0 20px 19px;
-  
-  }
+.select {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
+@media (max-width: 767px) {
+	.select {
+		display: grid;
+		justify-content: center;
+		align-items: center;
+		place-items: center;
+	}
+}
+
+@media (min-width: 768px) {
+	.toggle {
+		padding: 0;
+		margin: 29px 0 20px 19px;
+	}
+}
