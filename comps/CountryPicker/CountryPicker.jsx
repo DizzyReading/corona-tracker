@@ -10,10 +10,12 @@ const CountryPicker = ({ country, isClicked, handleHistoricalDataForCountries, h
 	const [ fetchedCountries, setFetchedCountries ] = useState([]);
 
 	useEffect(
-		async () => {
-			const data = await fetchCountries();
-
-			setFetchedCountries(data);
+		() => {
+			const getData = async () => {
+				const data = await fetchCountries();
+				setFetchedCountries(data);
+			};
+			getData();
 		},
 		[ setFetchedCountries ]
 	);

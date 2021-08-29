@@ -6,7 +6,7 @@ import styles from './Chart.module.css';
 import { css, cx } from "@emotion/css";
 import Loader from '../Loader/Loader'
 import { defaults } from 'react-chartjs-2';
-import { Button } from '@material-ui/core';
+
 
 
 
@@ -20,30 +20,33 @@ const Chart = ({isClicked, countryHistData, data:{confirmed, deaths, recovered},
     deaths:[]
   });
 
-useEffect(async () => {
+useEffect(() => {
 
-const response = await fetchDailyData();
+  const getDailyData = async () => {
+    const response = await fetchDailyData();
+    setDailyData({
+    
+    ...dailyData.date, date: Object.keys(response.cases), 
+    ...dailyData.cases, cases: Object.values(response.cases),
+    ...dailyData.recovered, recovered: Object.values(response.recovered),
+    ...dailyData.deaths, deaths: Object.values(response.deaths)
+    
+    })
 
-setDailyData({
+  }
 
-...dailyData.date, date: Object.keys(response.cases), 
-...dailyData.cases, cases: Object.values(response.cases),
-...dailyData.recovered, recovered: Object.values(response.recovered),
-...dailyData.deaths, deaths: Object.values(response.deaths)
-
-})
-
+  getDailyData();
 
   }, []);
 
   const lineChart = (
 
 
-  dailyData ? (  <Line className={css`
-    padding:2rem 
-    `}
+  dailyData ? (  <Line className={styles.globalLineChart}
  options= {
+
 {
+
         plugins: {
             title: {
                 display: true,
@@ -52,7 +55,9 @@ setDailyData({
             }
         }
     }
+   
  }
+
     data={
       {
         labels: dailyData.date.map((date) => date),
@@ -88,11 +93,11 @@ setDailyData({
 
   const countryHistDataLineChart = (
 
-countryHistData ? (  <Line className={css`
-    padding:2rem 
-    `}
+countryHistData ? (  <Line className={styles.countryHistData}
  options= {
-{
+
+   {
+
         plugins: {
             title: {
                 display: true,
@@ -101,7 +106,10 @@ countryHistData ? (  <Line className={css`
             }
         }
     }
+
+    
  }
+ 
     data={
       {
         labels:  Object.keys(countryHistData.cases).map((date) => date),
@@ -139,9 +147,7 @@ countryHistData ? (  <Line className={css`
     confirmed ? ( 
     <>
     <Bar
-    className={css`
-    padding:2rem 
-    `}
+    className={styles.currentData}
     data= {{
       labels: ['Infected', 'Recovered', 'Deaths'],
       datasets: [{
@@ -163,6 +169,7 @@ countryHistData ? (  <Line className={css`
     }}
 
     options={
+
       {
          plugins: {
             title: {
@@ -172,6 +179,7 @@ countryHistData ? (  <Line className={css`
             }
         }
       }
+     
     }
     >
 
@@ -192,7 +200,10 @@ countryHistData ? (  <Line className={css`
 
   return (
 
-   <div>
+   <div className={css `
+    margin-top:2rem  
+
+   `}> 
     
      { 
       countryHistData === undefined  ? (lineChart) :  

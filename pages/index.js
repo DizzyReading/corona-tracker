@@ -1,11 +1,46 @@
+import React from 'react';
 import { css, cx } from '@emotion/css';
 import { Cards, Chart, CountryPicker } from '../comps';
 import Typography from '@material-ui/core/Typography';
 import { fetchData } from './api';
 import { fecthHistoicalDataForCountries } from './api';
 import { useEffect, useState, useRef } from 'react';
+import Alert from '@material-ui/core/Alert';
+import Collapse from '@material-ui/core/Collapse';
+import IconButton from '@material-ui/core/IconButton';
+import { AiOutlineCloseCircle } from 'react-icons/ai';
+import Box from '@material-ui/core/Box';
 
 import Loader from '../comps/Loader/Loader';
+
+function TransitionAlerts() {
+	const [ open, setOpen ] = useState(true);
+
+	return (
+		<Box sx={{ width: '100%', padding: '2rem' }}>
+			<Collapse in={open}>
+				<Alert
+					severity="info"
+					action={
+						<IconButton
+							aria-label="close"
+							color="inherit"
+							size="small"
+							onClick={() => {
+								setOpen(false);
+							}}
+						>
+							<AiOutlineCloseCircle fontSize="inherit" />
+						</IconButton>
+					}
+					sx={{ mb: 2 }}
+				>
+					Unfortunately, for some reason the API has stopped collecting data for recovered patients Worldwide.
+				</Alert>
+			</Collapse>
+		</Box>
+	);
+}
 
 const App = () => {
 	const [ data, setData ] = useState({});
@@ -19,10 +54,13 @@ const App = () => {
 		deaths: []
 	});
 
-	useEffect(async () => {
-		const fetchedData = await fetchData();
+	useEffect(() => {
+		const getData = async () => {
+			const fetchedData = await fetchData();
+			setData(fetchedData);
+		};
 
-		setData(fetchedData);
+		getData();
 	}, []);
 
 	const handleCountryChange = async (country) => {
@@ -36,7 +74,7 @@ const App = () => {
 		setCountryHistData(countryHistDataRes);
 	};
 
-	const handleHistoricalDataForCountries = async (e) => {
+	const handleHistoricalDataForCountries = () => {
 		setIsClicked(!isClicked); // toggle
 	};
 	console.log(country);
@@ -56,6 +94,7 @@ const App = () => {
 			>
 				Corona Tracker
 			</Typography>
+			<TransitionAlerts />
 
 			<Cards data={data} />
 
